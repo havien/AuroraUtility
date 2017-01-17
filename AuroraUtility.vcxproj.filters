@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Time">
+      <UniqueIdentifier>{ca932072-9f1d-4350-9965-3b1456812899}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File">
+      <UniqueIdentifier>{45ecd7bc-892f-4699-9ece-cbdbfd966818}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Define">
+      <UniqueIdentifier>{ba32cc0b-3d08-4b03-a509-5c6b27cc9282}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{538aa189-cb74-47d3-8ddd-5c76ef8d0702}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Singleton">
+      <UniqueIdentifier>{8d9d76bb-b580-4060-8e62-0004a19c13fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Timer">
+      <UniqueIdentifier>{28997d16-a3d1-49f3-bd69-35b79f6f8320}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lock">
+      <UniqueIdentifier>{c072a722-2bcf-4d93-badc-38692ce87a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowsService">
+      <UniqueIdentifier>{9d52d4b6-ba93-42d2-94dc-9c0b639c0638}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Includes">
+      <UniqueIdentifier>{82d8dff3-6706-4785-a4e5-bc1395d1e51f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collections">
+      <UniqueIdentifier>{c57fec43-8a93-4307-9eae-fb2658a3c629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="String">
+      <UniqueIdentifier>{d6af054f-4d92-4dab-a6a6-c2d326f8b134}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>File</Filter>
+    </ClInclude>
+    <ClInclude Include="ThreadManager.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="PerformanceCounter.h">
+      <Filter>Timer</Filter>
+    </ClInclude>
+    <ClInclude Include="Lock.h">
+      <Filter>Lock</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h" />
+    <ClInclude Include="NotUseCurrent.h" />
+    <ClInclude Include="PlatformManager.h" />
+    <ClInclude Include="MemoryManager.h" />
+    <ClInclude Include="ServiceModeManager.h">
+      <Filter>WindowsService</Filter>
+    </ClInclude>
+    <ClInclude Include="MiscManager.h" />
+    <ClInclude Include="AuroraSingleton.h">
+      <Filter>Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Includes.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.h">
+      <Filter>Collections</Filter>
+    </ClInclude>
+    <ClInclude Include="AuroraDefine.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="StringManager.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="StringManager.hpp">
+      <Filter>String</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="ThreadManager.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="PerformanceCounter.cpp">
+      <Filter>Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="ServiceModeManager.cpp">
+      <Filter>WindowsService</Filter>
+    </ClCompile>
+    <ClCompile Include="MiscManager.cpp" />
+    <ClCompile Include="Vector.cpp">
+      <Filter>Collections</Filter>
+    </ClCompile>
+    <ClCompile Include="StringManager.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
