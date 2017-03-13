@@ -29,8 +29,13 @@ namespace Aurora
 	public:
 		CAutoLockWindows( LockObject* pObject )
 		{
-			m_MonitorObject = pObject;
-			if( false == m_InitializedObject )
+			if( nullptr == pObject )
+			{
+				return;
+			}
+
+			pMonitorObject = pObject;
+			if( false == initialized )
 			{
 				//InitLockObject();
 			}
@@ -58,7 +63,7 @@ namespace Aurora
 			if( false == IsLocked() )
 			{
 				locked = true;
-				EnterCriticalSection( m_MonitorObject );
+				EnterCriticalSection( pMonitorObject );
 			}
 		}
 
@@ -66,14 +71,14 @@ namespace Aurora
 		{
 			if( true == IsLocked() )
 			{
-				LeaveCriticalSection( m_MonitorObject );
+				LeaveCriticalSection( pMonitorObject );
 				locked = false;
 			}
 		}
 
 		const inline bool IsLocked( void ) const { return locked; }
 
-		bool m_InitializedObject;
-		CRITICAL_SECTION* m_MonitorObject;
+		bool initialized;
+		CRITICAL_SECTION* pMonitorObject;
 	};
 };
