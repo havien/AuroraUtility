@@ -15,6 +15,8 @@ namespace Aurora
 	const UInt16 MAX_NORMAL_STRING_LEN = 256;
 	const UInt16 MAX_LONG_STRING_LEN = 1024;
 	const UInt16 MAX_SUPER_STRING_LEN = 2048;
+
+	const UInt16 MAX_FILE_EXTENSION_LEN = 16 + 1;
 	
 	const UInt16 MAX_DATETIME_STRING_LEN = 19 + 1;
 	const UInt16 MAX_THREAD_NAME_LEN = 40;
@@ -27,6 +29,32 @@ namespace Aurora
 		Normal,
 		WriteLog,
 	};
+
+	enum class EFile : Byte
+	{
+		ANSI,
+		UTF8,
+		Binary,
+	};
+
+	enum class EFileOpenMode : Byte
+	{
+		Read,
+		Write,
+		ReadWrite,
+	};
+
+	namespace LogSystem
+	{
+		enum class ELogType : Byte
+		{
+			Info = 0,
+			Trace,
+			Warning,
+			Critical,
+			Size
+		};
+	}
 
 #define SAFE_DELETE( p ) if( p ) { delete p; p = nullptr; }
 #define SAFE_DELETE_ARRAY_POINTER( p ) if( p ) { delete [] p; p = nullptr; }

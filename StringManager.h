@@ -4,6 +4,7 @@
 #include "AuroraDefine.h"
 #include "AuroraSingleton.h"
 
+using namespace std;
 namespace Aurora
 {
 	template <typename T>
@@ -15,49 +16,43 @@ namespace Aurora
 	class StringManager : public Singleton<StringManager>
 	{
 		friend class Singleton<StringManager>;
-	private:
-		StringManager( void );
-
+		
+		explicit StringManager( void );
 		NON_COPYABLE( StringManager );
 	public:
 		virtual ~StringManager( void );
 
-		void MakeString( OUT char* pOutString, char* szFormat, ... );
-		void MakeString( OUT WCHAR* pOutString, WCHAR* szFormat, ... );
+		template <typename T>
+		void Clear( T* pString, const size_t length );
+
+		template <typename T>
+		void Clear( T* pString, const Int16 length );
+
+		template <typename T>
+		void Clear( T* pString, const UInt16 length );
+
+		void FormatString( OUT char* pOutString, char* szFormat, ... ) const;
+		void FormatString( OUT WCHAR* pOutString, WCHAR* szFormat, ... ) const;
 		
-		void WideToMultiByte( const WCHAR* pSrc, OUT char* pDest );
+		void CharToWChar( const char* pSrc, OUT WCHAR* pDest ) const;
+		void WCharToChar( const WCHAR* pSrc, OUT char* pDest ) const;
 		void WideToString( const WCHAR* pSrc, OUT std::string &destString );
-		
-		template <typename T>
-		void Clear( T* pString, const size_t length )
-		{
-			memset( static_cast<void*>(pString), 0, sizeof( T ) * length );
-		}
 
-		template <typename T>
-		void Clear( T* pString, const Int16 length )
-		{
-			Clear( pString, static_cast<size_t>(length) );
-		}
+		static void CalCLength( const char* pSrc, char* pDest, OUT size_t& calcLength );
+		void CalCLength( const WCHAR* pSrc, WCHAR* pDest, OUT size_t& calcLength ) const;
 
-		template <typename T>
-		void Clear( T* pString, const UInt16 length )
-		{
-			Clear( pString, static_cast<size_t>(length) );
-		}
-
-		void CalcLength( const char* pSrc, char* pDest, OUT size_t& calcLength );
-		void CalcLength( const WCHAR* pSrc, WCHAR* pDest, OUT size_t& calcLength );
-
-		void Copy( const char* pSrc, char* pDest, const size_t length );
-		void Copy( const WCHAR* pSrc, WCHAR* pDest, const size_t length );
+		void Copy( const char* pSrc, char* pDest, const size_t length ) const;
+		void Copy( const WCHAR* pSrc, WCHAR* pDest, const size_t length ) const;
 
 		void ClearAndCopy( const char* pSrc, char* pDest, const size_t length );
 		void ClearAndCopy( const char* pSrc, char* pDest );
 		
 		void ClearAndCopy( const WCHAR* pSrc, WCHAR* pDest, const size_t length );
 		void ClearAndCopy( const WCHAR* pSrc, WCHAR* pDest );
-	};
 
-	#define AuroraStringManager StringManager::Instance()
+		void Tokenize( char* pStr, char* const pDelim, OUT vector<string>& outStrings ) const;
+		void Tokenize( WCHAR* pStr, WCHAR* const pDelim, OUT vector<wstring>& outStrings ) const;
+	};
 }
+
+#define AuroraStringManager Aurora::StringManager::Instance()

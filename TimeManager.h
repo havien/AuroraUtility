@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Includes.h"
+#include <time.h>
+
 #include "AuroraDefine.h"
 #include "AuroraSingleton.h"
 
@@ -13,7 +15,7 @@ namespace Aurora
 	class TimeManager : public Singleton<TimeManager>
 	{
 		friend class Singleton<TimeManager>;
-	private:
+
 		TimeManager( void ) : _currentTime( time( nullptr ) )
 		{
 		}

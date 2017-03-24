@@ -1,24 +1,17 @@
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <crtdbg.h>
-#include <time.h>
-#include <errno.h>
 #include <utility>
 #include <list>
 #include <vector>
 #include <map>
 #include <unordered_map>
 #include <deque>
-#include <ctime>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
 #endif
 
 #if defined(WIN32) || defined(_WIN32) || defined(_WIN64)
-	#include <tchar.h>
 	#include <Windows.h>
 	#include <Shellapi.h>
 	#include <process.h>

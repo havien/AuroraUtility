@@ -1,5 +1,6 @@
 #pragma once
 #include "StringManager.h"
+#include <iostream>
 
 using namespace Aurora;
 
@@ -13,56 +14,70 @@ StringManager::~StringManager( void )
 
 }
 
-void StringManager::MakeString( OUT char* pOutString, char* szFormat, ... )
+template <typename T>
+void StringManager::Clear( T* pString, const size_t length )
 {
-	//static LPCSTR szBuff[MAX_LONG_STRING_LEN] = { 0 };
+	auto realLen = length; realLen;
+	memset( static_cast<void *>(pString), 0, sizeof( T ) * length );
+}
+
+template <typename T>
+void StringManager::Clear( T* pString, const Int16 length )
+{
+	Clear( pString, static_cast<size_t>(length) );
+}
+
+template <typename T>
+void StringManager::Clear( T* pString, const UInt16 length )
+{
+	Clear( pString, static_cast<size_t>(length) );
+}
+
+void StringManager::FormatString( OUT char* pOutString, char* szFormat, ... ) const
+{
 	va_list args;
 
 	va_start( args, szFormat );
-	vsnprintf_s( (char*)pOutString, MAX_LONG_STRING_LEN, MAX_LONG_STRING_LEN, szFormat, args );
+	vsnprintf_s( static_cast<char*>(pOutString), MAX_LONG_STRING_LEN, MAX_LONG_STRING_LEN, szFormat, args );
 	va_end( args );
-
-	//wprintf_s( (WCHAR* )&szBuff, LongStringLen );
-	//return (char*)szBuff;
 }
 
-void StringManager::MakeString( OUT WCHAR* pOutString, WCHAR* szFormat, ... )
+void StringManager::FormatString( OUT WCHAR* pOutString, WCHAR* szFormat, ... ) const
 {
-	//static LPCWSTR szBuff[MAX_LONG_STRING_LEN] = { 0 };
 	va_list args;
 
 	va_start( args, szFormat );
-	_vsnwprintf_s( (WCHAR* )pOutString, MAX_LONG_STRING_LEN, MAX_LONG_STRING_LEN, szFormat, args );
+	_vsnwprintf_s( static_cast<WCHAR*>(pOutString), MAX_LONG_STRING_LEN, MAX_LONG_STRING_LEN, szFormat, args );
 	va_end( args );
 
-	wprintf_s( (WCHAR* )&pOutString, MAX_LONG_STRING_LEN );
-	//return (WCHAR* )szBuff;
+	wprintf_s( reinterpret_cast<WCHAR*>(&pOutString), MAX_LONG_STRING_LEN );
 }
 
-void StringManager::WideToMultiByte( const WCHAR* pSrc, OUT char* pDest )
+void StringManager::CharToWChar( const char* pSrc, OUT WCHAR* pDest ) const
 {
-	if( pSrc/* && pDest */ )
+	if( pSrc && pDest )
 	{
-		// Convert the WCHAR string to a char* string. Record 
-		//.the length of the original string and add 1 to it to
-		//.account for the terminating null character.
-		size_t origsize = wcslen( pSrc ) + 1;
+		size_t convertedCharsw = 0;
+		auto size = (strlen( pSrc ) + 1) * 2;
+		auto result = mbstowcs_s( &convertedCharsw, pDest, size, pSrc, size );
+		if ( 0 != result )
+		{
+
+		}
+	}
+}
+
+void StringManager::WCharToChar( const WCHAR* pSrc, OUT char* pDest ) const
+{
+	if( pSrc && pDest )
+	{
 		size_t convertedChars = 0;
+		auto size = (wcslen( pSrc ) + 1);
+		auto result = wcstombs_s( &convertedChars, pDest, size, pSrc, size );
+		if ( 0 != result )
+		{
 
-		// Allocate two bytes in the multibyte output string for every wide
-		// character in the input string (including a wide character
-		// null). Because a multibyte character can be one or two bytes,
-		// you should allot two bytes for each character. Having extra
-		// space for the new string is not an error, but having
-		// insufficient space is a potential security problem.
-		const size_t newsize = (origsize * 2);
-
-		// The new string will contain a converted copy of the original
-		// string plus the type of string appended to it.
-		//pDest = new char[newsize + strConcatsize];
-
-		// Put a copy of the converted string into nstring
-		wcstombs_s( &convertedChars, pDest, newsize, pSrc, _TRUNCATE );
+		}		
 	}
 }
 
@@ -72,36 +87,18 @@ void StringManager::WideToString( const WCHAR* pSrc, OUT std::string &destString
 	auto length = (wcslen( pSrc ) + 1);
 
 	//convert from wide char to narrow char array
-	char* pTempChar = new char[length];
+	auto pTempChar = new char[length];
 	Clear( pTempChar, length );
 
-	char DefChar = ' ';
+	auto DefChar = ' ';
 	::WideCharToMultiByte( CP_ACP, 0, pSrc, -1, pTempChar, static_cast<Int32>(length), &DefChar, NULL );
 
 	destString.assign( pTempChar );
 
 	SAFE_DELETE_ARRAY_POINTER( pTempChar );
 }
-//
-//template <typename T>
-//void StringManager::Clear( T* pString, const size_t length )
-//{
-//	memset( static_cast<void *>(pString), 0, sizeof( T ) * length );
-//}
-//
-//template <typename T>
-//void StringManager::Clear( T* pString, const Int16 length )
-//{
-//	Clear( pString, static_cast<size_t>(length) );
-//}
-//
-//template <typename T>
-//void StringManager::Clear( T* pString, const UInt16 length )
-//{
-//	Clear( pString, static_cast<size_t>(length) );
-//}
 
-void StringManager::CalcLength( const char* pSrc, char* pDest, OUT size_t& calcLength )
+void StringManager::CalCLength( const char* pSrc, char* pDest, OUT size_t& calcLength )
 {
 	const auto srcLength = strlen( pSrc ) + 1;
 	const auto destLength = strlen( pDest ) + 1;
@@ -113,7 +110,7 @@ void StringManager::CalcLength( const char* pSrc, char* pDest, OUT size_t& calcL
 	}
 }
 
-void StringManager::CalcLength( const WCHAR* pSrc, WCHAR* pDest, OUT size_t& calcLength )
+void StringManager::CalCLength( const WCHAR* pSrc, WCHAR* pDest, OUT size_t& calcLength ) const
 {
 	const auto srcLength = wcslen( pSrc ) + 1;
 	const auto destLength = wcslen( pDest ) + 1;
@@ -125,7 +122,7 @@ void StringManager::CalcLength( const WCHAR* pSrc, WCHAR* pDest, OUT size_t& cal
 	}
 }
 
-void StringManager::Copy( const char* pSrc, char* pDest, const size_t length )
+void StringManager::Copy( const char* pSrc, char* pDest, const size_t length ) const
 {
 	if( pSrc && pDest )
 	{
@@ -133,7 +130,7 @@ void StringManager::Copy( const char* pSrc, char* pDest, const size_t length )
 	}
 }
 
-void StringManager::Copy( const WCHAR* pSrc, WCHAR* pDest, const size_t length )
+void StringManager::Copy( const WCHAR* pSrc, WCHAR* pDest, const size_t length ) const
 {
 	if( pSrc && pDest )
 	{
@@ -155,7 +152,7 @@ void StringManager::ClearAndCopy( const char* pSrc, char* pDest )
 	if( pDest && pSrc )
 	{
 		size_t length = 0;
-		CalcLength( pSrc, pDest, OUT length );
+		CalCLength( pSrc, pDest, OUT length );
 		
 		Clear( pDest, length );
 		Copy( pSrc, pDest, length );
@@ -169,7 +166,7 @@ void StringManager::ClearAndCopy( const WCHAR* pSrc, WCHAR* pDest, const size_t 
 		Clear( pDest, length );
 
 		size_t calcLength = 0;
-		CalcLength( pSrc, pDest, OUT calcLength );
+		CalCLength( pSrc, pDest, OUT calcLength );
 		
 		if( length == calcLength )
 		{
@@ -187,8 +184,36 @@ void StringManager::ClearAndCopy( const WCHAR* pSrc, WCHAR* pDest )
 	if( pDest && pSrc )
 	{
 		size_t calcLength = 0;
-		CalcLength( pSrc, pDest, OUT calcLength );
+		CalCLength( pSrc, pDest, OUT calcLength );
 		Clear( pDest, calcLength );
 		Copy( pSrc, pDest, calcLength );
+	}
+}
+
+void StringManager::Tokenize( char* pStr, char* const pDelim, OUT vector<string>& outStrings ) const
+{
+	if ( pStr && pDelim )
+	{
+		char* buffer = nullptr;
+		auto pToken = strtok_s( pStr, pDelim, &buffer );
+		while ( pToken )
+		{
+			outStrings.emplace_back( std::string( pToken ) );
+			pToken = strtok_s( nullptr, pDelim, &buffer );
+		}
+	}
+}
+
+void StringManager::Tokenize( WCHAR* pStr, WCHAR* const pDelim, OUT vector<wstring>& outStrings ) const
+{
+	if( pStr && pDelim )
+	{
+		wchar_t* buffer = nullptr;
+		auto pToken = wcstok_s( pStr, pDelim, &buffer );
+		while ( pToken ) 
+		{
+			outStrings.emplace_back( std::wstring( pToken ) );
+			pToken = wcstok_s( nullptr, pDelim, &buffer );
+		}
 	}
 }

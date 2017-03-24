@@ -18,20 +18,20 @@ namespace Aurora
 
 		void SetLogFile( WCHAR* pLogFileName );
 
-		DWORD GetProcessorCount( void );
-		UInt16 GetProcessorCountUInt16( void );
+		DWORD GetProcessorCount( void ) const;
+		UInt16 GetProcessorCountUInt16( void ) const;
 
 		void PrintDebugTextToOutputWindow( ELogPrintType type, WCHAR* szFormat, ... );
 
 		const bool SupportQPF( Int64 &QPFTick );
 		
-		Int64 GetQPCTick( void );
+		Int64 GetQPCTick( void ) const;
 		Int64 GetQPCElapsedMicroSecond( const Int64 &qptTick, const Int64 &startTick, const Int64 &endTick );
-		Int64 GetQPCElapsedSecond( const Int64 &qptTick, const Int64 &startTick, const Int64 &endTick );
+		Int64 GetQPCElapsedSecond( const Int64 &qptTick, const Int64 &startTick, const Int64 &endTick ) const;
 
 		bool ExecuteProcess( const WCHAR* pProcessName, const WCHAR* pParameters, 
 							 const bool minimized = true, const UInt32 executeCount = 1, 
-							 DWORD sleepTime = 0 );
+							 DWORD sleepTime = 0 ) const;
 
 		inline const bool SupportQFC( void ) const
 		{

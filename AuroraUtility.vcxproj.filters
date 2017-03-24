@@ -77,6 +77,9 @@
     <ClInclude Include="StringManager.hpp">
       <Filter>String</Filter>
     </ClInclude>
+    <ClInclude Include="File.h">
+      <Filter>File</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeManager.cpp">
@@ -100,6 +103,9 @@
     </ClCompile>
     <ClCompile Include="StringManager.cpp">
       <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="File.cpp">
+      <Filter>File</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

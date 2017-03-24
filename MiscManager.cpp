@@ -12,9 +12,10 @@
 
 using namespace Aurora;
 	
-MiscManager::MiscManager( void )
+MiscManager::MiscManager( void ) : 
+supportQFC( false )
 {
-	InitializeCriticalSection( &_monitorObject );
+	InitializeCriticalSection(&_monitorObject);
 }
 
 MiscManager::~MiscManager( void )
@@ -26,7 +27,7 @@ void MiscManager::SetLogFile( WCHAR* pLogFileName )
 {
 	if( pLogFileName )
 	{
-		bool openResult = AuroraFileManager->OpenFile( pLogFileName );
+		bool openResult = AuroraFileManager->Open( pLogFileName );
 		if( true == openResult )
 		{
 			AuroraStringManager->ClearAndCopy( pLogFileName, logFileName, MAX_NORMAL_STRING_LEN );
@@ -34,14 +35,14 @@ void MiscManager::SetLogFile( WCHAR* pLogFileName )
 	}
 }
 
-DWORD MiscManager::GetProcessorCount( void )
+DWORD MiscManager::GetProcessorCount( void ) const
 {
 	SYSTEM_INFO SysInfo;
 	GetSystemInfo( &SysInfo );
 	return SysInfo.dwNumberOfProcessors;
 }
 
-UInt16 MiscManager::GetProcessorCountUInt16( void )
+UInt16 MiscManager::GetProcessorCountUInt16( void ) const
 {
 	return static_cast<UInt16>(GetProcessorCount());
 }
@@ -73,7 +74,7 @@ void MiscManager::PrintDebugTextToOutputWindow( ELogPrintType LogPrintType, WCHA
 
 			if( LogPrintType == ELogPrintType::WriteLog )
 			{
-				AuroraFileManager->WriteFile( reinterpret_cast<WCHAR*>(szBuff) );
+				AuroraFileManager->Write( reinterpret_cast<WCHAR*>(szBuff) );
 			}
 		}
 	}
@@ -95,7 +96,7 @@ const bool MiscManager::SupportQPF( Int64 &QPFTick )
 	return supportQFC;
 }
 
-Int64 MiscManager::GetQPCTick( void )
+Int64 MiscManager::GetQPCTick( void ) const
 {
 	if( true == supportQFC )
 	{
@@ -110,17 +111,17 @@ Int64 MiscManager::GetQPCTick( void )
 Int64 MiscManager::GetQPCElapsedMicroSecond( const Int64 &QPFTick, const Int64 &StartTick, const Int64 &EndTick )
 {
 	double TempQPFTick = static_cast<double>((QPFTick / 1000000.0));
-	return (Int64)((EndTick - StartTick) / (TempQPFTick));
+	return static_cast<Int64>((EndTick - StartTick) / (TempQPFTick));
 }
 
-Int64 MiscManager::GetQPCElapsedSecond( const Int64 &QPFTick, const Int64 &StartTick, const Int64 &EndTick )
+Int64 MiscManager::GetQPCElapsedSecond( const Int64 &QPFTick, const Int64 &StartTick, const Int64 &EndTick ) const
 {
 	return ((EndTick - StartTick) / (QPFTick));
 }
 
 bool MiscManager::ExecuteProcess( const WCHAR* pProcessName, const WCHAR* pParameters,
 									const bool minimized, const UInt32 ExecuteCount,
-									DWORD SleepTime )
+									DWORD SleepTime ) const
 {
 	if( pProcessName )
 	{
