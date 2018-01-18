@@ -7,11 +7,11 @@
 #include <unordered_map>
 #include <deque>
 
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-
 #if defined(WIN32) || defined(_WIN32) || defined(_WIN64)
+	#ifndef WIN32_LEAN_AND_MEAN
+		#define WIN32_LEAN_AND_MEAN
+	#endif
+
 	#include <Windows.h>
 	#include <Shellapi.h>
 	#include <process.h>

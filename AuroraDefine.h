@@ -10,24 +10,34 @@ namespace Aurora
 	typedef __int64 Int64;
 	typedef unsigned __int64 UInt64;
 
-	const UInt16 MAX_TINY_STRING_LEN = 32;
-	const UInt16 MAX_SHORT_STRING_LEN = 128;
-	const UInt16 MAX_NORMAL_STRING_LEN = 256;
-	const UInt16 MAX_LONG_STRING_LEN = 1024;
-	const UInt16 MAX_SUPER_STRING_LEN = 2048;
+	typedef unsigned char Byte;
+	typedef short I16;
+	typedef unsigned short UI16;
+	typedef int I32;
+	typedef unsigned int UI32;
+	typedef __int64 I64;
+	typedef unsigned __int64 UI64;
 
-	const UInt16 MAX_FILE_EXTENSION_LEN = 16 + 1;
+	constexpr UInt16 MAX_FILE_EXTENSION_LEN = 16 + 1;
 	
-	const UInt16 MAX_DATETIME_STRING_LEN = 19 + 1;
-	const UInt16 MAX_THREAD_NAME_LEN = 40;
+	constexpr UInt16 MAX_DATETIME_STRING_LEN = 19 + 1;
+	constexpr UInt16 MAX_TIME_STRING_LEN = 24;
+	constexpr UInt16 MAX_THREAD_NAME_LEN = 40;
 
-	const UInt16 NORMAL_QUEUE_SIZE = 1024;
+	constexpr UInt16 NORMAL_QUEUE_SIZE = 1024;
+
+	constexpr UInt16 DEFAULT_TINY_STR_LEN = 32;
+	constexpr UInt16 DEFAULT_SHORT_STR_LEN = DEFAULT_TINY_STR_LEN << 1;
+	constexpr UInt16 DEFAULT_NORMAL_STR_LEN = DEFAULT_SHORT_STR_LEN << 1;
+	constexpr UInt16 DEFAULT_BIG_STR_LEN = DEFAULT_NORMAL_STR_LEN << 1;
+	constexpr UInt16 DEFAULT_BIGGER_STR_LEN = DEFAULT_BIG_STR_LEN << 1;
+	constexpr UInt16 DEFAULT_BIGGEST_STR_LEN = DEFAULT_BIGGER_STR_LEN << 1;
 
 	enum class ELogPrintType : Byte
 	{
 		None,
 		Normal,
-		WriteLog,
+		Write,
 	};
 
 	enum class EFile : Byte
@@ -56,7 +66,23 @@ namespace Aurora
 		};
 	}
 
-#define SAFE_DELETE( p ) if( p ) { delete p; p = nullptr; }
-#define SAFE_DELETE_ARRAY_POINTER( p ) if( p ) { delete [] p; p = nullptr; }
-#define NON_COPYABLE( arg ) arg( const arg& copyArg ); const arg& operator=( const arg& );
+	template <typename T>
+	void SafeDelete( T* p )
+	{
+		if( p )
+		{ 
+			delete p; 
+			p = nullptr; 
+		}
+	}
+
+	template <typename T>
+	void SafeDeleteArray( T* p )
+	{
+		if( p )
+		{ 
+			delete[] p; 
+			p = nullptr; 
+		}
+	}
 }

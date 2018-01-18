@@ -1,12 +1,11 @@
 #pragma once
 #include "FileManager.h"
-#include "MiscManager.h"
 #include "StringManager.h"
 
 using namespace std;
 using namespace Aurora;
 
-FileManager::FileManager( void ) : 
+FileManager::FileManager(): 
 _pWorkFile( nullptr ), 
 _lastErrno( EINVAL )
 {
@@ -69,10 +68,11 @@ bool FileManager::Write( const WCHAR* pWrite )
 	}
 	else if( nullptr != _pWorkFile )
 	{
+		pWrite;
 		// 이전에 작업 된 파일이 있다고 판단함.
 		// 씀.
-		int PutResult = fputws( pWrite, _pWorkFile );
-		PRINT_NORMAL_LOG( L"Write File!! Result %d\n", PutResult );
+		//int PutResult = fputws( pWrite, _pWorkFile );
+		//AuroraLogManager->Trace( L"Write File!! Result %d", PutResult );
 		/*if( 0 > PutResult )
 		{*/
 				
@@ -91,26 +91,20 @@ void FileManager::Close( void )
 	}
 }
 
-// ReSharper disable once CppMemberFunctionMayBeStatic
-void FileManager::Rename( const char* pPath, const char* pOld, const char* pNew ) const
+int FileManager::Rename( const char* pPath, const char* pOld, const char* pNew ) const
 {
 	if( pPath && pOld && pNew )
 	{
-		char pathOld[MAX_PATH] = { 0 };
-		char pathNew[MAX_PATH] = { 0 };
+		char pathOld[MAX_PATH*2] = { 0 };
+		char pathNew[MAX_PATH*2] = { 0 };
 
-		AuroraStringManager->FormatString( pathOld, "%s%s", pPath, pOld );
-		AuroraStringManager->FormatString( pathNew, "%s%s", pPath, pNew );
+		AuroraStringManager->FormatString( pathOld, (MAX_PATH * 2), "%s%s", pPath, pOld );
+		AuroraStringManager->FormatString( pathNew, (MAX_PATH * 2), "%s%s", pPath, pNew );
 
-		if( 0 != rename( pathOld, pathNew ) )
-		{
-			int a = 1, b = 2, c = 3;
-			int d = 555;
-
-			a; b; c; d;
-			/// error.
-		}
+		return rename( pathOld, pathNew );
 	}
+
+	return -1;
 }
 
 void FileManager::DetermineExtension( const char* pFileName, OUT char* pExtension ) const

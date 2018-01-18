@@ -8,7 +8,7 @@ namespace Aurora
 	class CQueue
 	{
 	protected:
-		CQueue( void ) : _initialized( false )
+		CQueue(): _initialized( false )
 		{
 
 		}
@@ -29,7 +29,7 @@ namespace Aurora
 		}
 		virtual ~CQueue( void )
 		{
-			SAFE_DELETE_ARRAY_POINTER( pData );
+			SafeDeleteArray( pData );
 		}
 
 		bool Recycle( int Position )
@@ -94,12 +94,12 @@ namespace Aurora
 			return pData[count];
 		}
 
-		inline size_t ItemCount( void ) const { return count; }
-		inline size_t GetSize( void ) const { return size; }
+		inline size_t ItemCount() const { return count; }
+		inline size_t GetSize() const { return size; }
 
 	private:
 		bool _initialized;
-		T *pData;
+		T* pData;
 		size_t size;
 		size_t count;
 	};

@@ -1,7 +1,60 @@
 #pragma once
 #include "TimeManager.h"
+#include <ctime>
+#include <locale>
 
 using namespace Aurora;
+
+TimeManager::TimeManager(): 
+_currentTime( time( nullptr ) )
+{
+
+}
+
+TimeManager::~TimeManager( void )
+{
+
+}
+
+/*
+chrono::milliseconds TimeManager::GetNowMill() noexcept
+{
+	return chrono::system_clock::now().time_since_epoch();
+}*/
+
+void TimeManager::InitRand( void ) noexcept
+{
+	std::srand( static_cast<UInt32>(std::time( 0 )) );
+}
+
+Int64 TimeManager::GetNowTimestamp() noexcept
+{
+	return chrono::seconds( std::time( 0 ) ).count();
+}
+
+const WCHAR* TimeManager::GetNowString( const WCHAR* pFormat ) noexcept
+{
+	auto now = chrono::system_clock::now();
+	auto time_t = chrono::system_clock::to_time_t( now );
+	localtime_s( &_nowTime, &time_t );
+	
+	size_t size = 0;
+	if( nullptr == pFormat )
+	{
+		size = std::wcsftime( _nowTimeSTR, (MAX_TIME_STRING_LEN-1), L"%Y/%m/%d %H:%M:%S", &_nowTime );
+	}
+	else
+	{
+		size = std::wcsftime( _nowTimeSTR, (MAX_TIME_STRING_LEN-1), pFormat, &_nowTime );
+	}
+
+	if( 0 == size )
+	{
+		// error
+	}
+
+	return _nowTimeSTR;
+}
 
 void TimeManager::ProcessLocalTimeWindows( void )
 {
@@ -9,7 +62,7 @@ void TimeManager::ProcessLocalTimeWindows( void )
 	GetLocalTime( &st );
 	GetLocalTime( &lt );
 
-	printf( "START TIME [%d-%d-%d %02d:%02d:%02d] / [%d-%d-%d %02d:%02d:%02d] SEND QUERY SUCCESS!\n",
+	printf( "START TIME [%d-%d-%d %02d:%02d:%02d] / [%d-%d-%d %02d:%02d:%02d] SEND QUERY SUCCESS!",
 			st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond,
 			lt.wYear, lt.wMonth, lt.wDay, lt.wHour, lt.wMinute, lt.wSecond );
 }

@@ -7,12 +7,12 @@ namespace Aurora
 	{
 		friend class Singleton<WindowsServiceManager>;
 	private:
-		WindowsServiceManager( void );
+		WindowsServiceManager();
 	public:
-		virtual ~WindowsServiceManager( void );
+		virtual ~WindowsServiceManager();
 
-		void Install( void );
-		void Delete( void );
-		void UpdateDesc( void );
+		void Install();
+		void Delete();
+		void UpdateDesc();
 	};
 }

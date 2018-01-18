@@ -34,7 +34,7 @@ void File::SetName( const WCHAR* pFileName )
 {
 	if ( pFileName )
 	{
-		AuroraStringManager->Copy( pFileName, _name, MAX_PATH );
+		AuroraStringManager->Copy( _name, pFileName, MAX_PATH );
 	}
 }
 

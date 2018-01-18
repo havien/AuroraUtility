@@ -34,6 +34,15 @@
     <Filter Include="String">
       <UniqueIdentifier>{d6af054f-4d92-4dab-a6a6-c2d326f8b134}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Flag">
+      <UniqueIdentifier>{fd3fe392-814d-4a2a-bcb5-fbd5f75d5cae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Log">
+      <UniqueIdentifier>{e9e26b7d-e1a6-4377-a3d2-e27da8d43e1b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WindowsConsole">
+      <UniqueIdentifier>{c69cfe35-ca28-45ae-be35-16162b426464}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TimeManager.h">
@@ -52,7 +61,6 @@
       <Filter>Lock</Filter>
     </ClInclude>
     <ClInclude Include="Queue.h" />
-    <ClInclude Include="NotUseCurrent.h" />
     <ClInclude Include="PlatformManager.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="ServiceModeManager.h">
@@ -80,6 +88,22 @@
     <ClInclude Include="File.h">
       <Filter>File</Filter>
     </ClInclude>
+    <ClInclude Include="Flag.h">
+      <Filter>Flag</Filter>
+    </ClInclude>
+    <ClInclude Include="LogManager.h">
+      <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Log</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="ElapsedTimeCalculator.h">
+      <Filter>Time</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsConsoleManager.h">
+      <Filter>WindowsConsole</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="TimeManager.cpp">
@@ -106,6 +130,22 @@
     </ClCompile>
     <ClCompile Include="File.cpp">
       <Filter>File</Filter>
+    </ClCompile>
+    <ClCompile Include="Flag.cpp">
+      <Filter>Flag</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Log</Filter>
+    </ClCompile>
+    <ClCompile Include="LogManager.cpp">
+      <Filter>Log</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="ElapsedTimeCalculator.cpp">
+      <Filter>Time</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowsConsoleManager.cpp">
+      <Filter>WindowsConsole</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

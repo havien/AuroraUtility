@@ -15,19 +15,19 @@ namespace Aurora
 	class ILock
 	{
 	public:
-		ILock( void ) { }
+		ILock(){ }
 
-		virtual ~ILock( void ) { }
-		virtual void Lock( void ) = 0;
-		virtual void UnLock( void ) = 0;
+		virtual ~ILock(){ }
+		virtual void Lock()= 0;
+		virtual void UnLock()= 0;
 	protected:
 		bool locked;
 	};
 
-	class CAutoLockWindows : public ILock
+	class CAutoLockW : public ILock
 	{
 	public:
-		CAutoLockWindows( LockObject* pObject )
+		CAutoLockW( LockObject* pObject )
 		{
 			if( nullptr == pObject )
 			{
@@ -46,9 +46,9 @@ namespace Aurora
 			}
 		}
 
-		CAutoLockWindows & operator=( const CAutoLockWindows & ) {}
+		CAutoLockW & operator=( const CAutoLockW & ) {}
 	public:
-		virtual ~CAutoLockWindows( void )
+		virtual ~CAutoLockW( void )
 		{ 
 			if( true == IsLocked() )
 			{
@@ -76,7 +76,7 @@ namespace Aurora
 			}
 		}
 
-		const inline bool IsLocked( void ) const { return locked; }
+		const inline bool IsLocked() const { return locked; }
 
 		bool initialized;
 		CRITICAL_SECTION* pMonitorObject;

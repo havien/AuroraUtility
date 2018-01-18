@@ -1,5 +1,6 @@
 #pragma once
 #include "ThreadManager.h"
+#include "LogManager.h"
 
 using namespace Aurora;
 
@@ -10,40 +11,47 @@ ThreadManager::ThreadManager( void )
 	
 ThreadManager::~ThreadManager( void )
 {
-	for( auto iter = _threads.begin(); iter != _threads.end(); ++iter )
+	/*for( auto iter = _threads.begin(); iter != _threads.end(); ++iter )
 	{
-		if( nullptr != (*iter) )
-		{
-			SAFE_DELETE( (*iter) );
-		}
-	}
+		SafeDelete( (*iter) );
+	}*/
 }
 
-AuroraThread* ThreadManager::CreateNewThread( void )
+Thread* ThreadManager::CreateThread( void )
 {
-	return new AuroraThread();
-	//return pNewThread;
-	//_threads.push_back( pNewThread );
+	return new Thread();
 }
 
-HANDLE ThreadManager::BeginThread( UInt32( __stdcall *StartAddress )(void *), void* pArgList, const char* pName )
+HANDLE ThreadManager::BeginThread( UInt32( __stdcall *StartAddress )(void *), void* pArgs, const WCHAR* pName )
 {
-	AuroraThread* pThread = CreateNewThread();
+	auto pThread = CreateThread();
 	if( pThread )
 	{
-		pThread->handle = (HANDLE)_beginthreadex( nullptr, 0, StartAddress, pArgList, 0, &pThread->identifier );
-		if( 0 == pThread->handle )
+		pThread->_handle = reinterpret_cast<HANDLE>(_beginthreadex( nullptr, 0,
+													 StartAddress, pArgs,
+													 0, &pThread->_id ));
+		if( 0 == pThread->_handle )
 		{
+			if( pName )
+			{
+				AuroraLogManager->Critical( L"Failed to Create Thread! [%s]", pName );
+			}
+			else
+			{
+				AuroraLogManager->Critical( L"Failed to Create Thread!" );
+			}
+			
 			return false;
 		}
 
 		if( nullptr != pName )
 		{
-			pThread->SetThreadName( pName );
+			pThread->SetName( pName );
 		}
 
-		_threads.push_back( pThread );
-		return pThread->handle;
+		//AuroraLogManager->Trace( L"Success to Begin Thread! [id:%d, name: %s]", pThread->_id, pThread->_name );
+		//_threads.push_back( pThread );
+		return pThread->_handle;
 	}
 
 	return INVALID_HANDLE_VALUE;
@@ -53,15 +61,15 @@ bool ThreadManager::StopThread( const HANDLE* pHandle )
 {
 	if( pHandle )
 	{
-		auto ThreadIter = FindThread( pHandle );
-		if( _threads.end() != ThreadIter )
-		{
-			// find!
-			CloseHandle( (*pHandle) );
-			//_endthreadex( 0 );
-				
-			return true;
-		}
+		//auto ThreadIter = FindThread( pHandle );
+		//if( _threads.end() != ThreadIter )
+		//{
+		//	// find!
+		//	CloseHandle( (*pHandle) );
+		//	//_endthreadex( 0 );
+		//		
+		//	return true;
+		//}
 			
 		return false;
 	}
@@ -69,9 +77,10 @@ bool ThreadManager::StopThread( const HANDLE* pHandle )
 	return false;
 }
 
-ThreadIter ThreadManager::FindThread( const HANDLE* pHandle )
+void ThreadManager::FindThread( const HANDLE* pHandle )
 {
-	if( pHandle )
+	pHandle;
+	/*if( pHandle )
 	{
 		for ( auto iter = _threads.begin(); iter != _threads.end(); ++iter )
 		{
@@ -84,7 +93,7 @@ ThreadIter ThreadManager::FindThread( const HANDLE* pHandle )
 		return _threads.end();
 	}
 
-	return _threads.end();
+	return _threads.end();*/
 }
 
 void ThreadManager::SetThreadName( const WCHAR* pThreadName )

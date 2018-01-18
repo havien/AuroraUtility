@@ -6,61 +6,48 @@
 
 namespace Aurora
 {
-	enum class EThreadState
+	class Thread
 	{
-		None = 0,
-		Waiting,
-		Suspend,
-		Running,
-	};
-
-	class AuroraThread
-	{
+		friend class ThreadManager;
 	public:
-		AuroraThread( void ) : 
-		handle( INVALID_HANDLE_VALUE ),
-		state( EThreadState::None ),
-		identifier( 0 )
+		Thread() : 
+		_handle( INVALID_HANDLE_VALUE ), _id( 0 )
 		{
-			memset( ThreadName, 0, MAX_THREAD_NAME_LEN );
+			memset( _name, 0, sizeof( WCHAR ) * MAX_THREAD_NAME_LEN );
 		}
 
-		~AuroraThread( void ) {}
+		~Thread(){}
 
-		void SetThreadName( const char* pThreadName ) const
+		void SetName( const WCHAR* pName ) const
 		{
-			if( pThreadName )
+			if( pName )
 			{
-				strcpy_s( (char*)&ThreadName, MAX_THREAD_NAME_LEN, pThreadName );
+				wcsncpy_s( (WCHAR*)_name, (MAX_THREAD_NAME_LEN - 1), 
+						   pName, (MAX_THREAD_NAME_LEN - 1) );
 			}
 		}
 
-		//private:
-		HANDLE handle;
-		unsigned int identifier;
-		EThreadState state;
-		char ThreadName[MAX_THREAD_NAME_LEN];
+	private:
+		HANDLE _handle;
+		UInt32 _id;
+		WCHAR _name[MAX_THREAD_NAME_LEN];
 	};
-
-	typedef std::vector<AuroraThread *> ThreadList;
-	typedef std::vector<AuroraThread *>::iterator ThreadIter;
 
 	class ThreadManager : public Singleton<ThreadManager>
 	{
 		friend class Singleton<ThreadManager>;
 	private:
-		ThreadManager( void );
-		AuroraThread* CreateNewThread( void );
-		ThreadList _threads;
+		ThreadManager();
+		Thread* CreateThread();
 	public:
-		virtual ~ThreadManager( void );
+		virtual ~ThreadManager();
 
-		HANDLE BeginThread( UInt32( __stdcall* StartAddress )(void *), void* pArgList, const char* pName );
+		HANDLE BeginThread( UInt32( __stdcall* StartAddress )(void *), void* pArgs, const WCHAR* pName );
 		bool StopThread( const HANDLE* pHandle );
 		
-		ThreadIter FindThread( const HANDLE* pHandle );
+		void FindThread( const HANDLE* pHandle );
 		void SetThreadName( const WCHAR* pName );
 	};
-
-	#define AuroraThreadManager ThreadManager::Instance()
 }
+
+#define AuroraThreadManager Aurora::ThreadManager::Instance()

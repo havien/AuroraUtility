@@ -22,7 +22,7 @@ void WindowsServiceManager::Install( void )
 
 	if( !GetModuleFileName( NULL, szPath, MAX_PATH ) )
 	{
-		printf( "Cannot install service (%d)\n", GetLastError() );
+		printf( "Cannot install service (%d)", GetLastError() );
 		return;
 	}
 
@@ -35,7 +35,7 @@ void WindowsServiceManager::Install( void )
 
 	if( NULL == schSCManager )
 	{
-		printf( "OpenSCManager failed (%d)\n", GetLastError() );
+		printf( "OpenSCManager failed (%d)", GetLastError() );
 		return;
 	}
 
@@ -58,13 +58,13 @@ void WindowsServiceManager::Install( void )
 
 	if( schService == NULL )
 	{
-		printf( "CreateService failed (%d)\n", GetLastError() );
+		printf( "CreateService failed (%d)", GetLastError() );
 		CloseServiceHandle( schSCManager );
 		return;
 	}
 	else
 	{
-		printf( "Service installed successfully\n" );
+		printf( "Service installed successfully" );
 	}
 
 	CloseServiceHandle( schService );
@@ -86,7 +86,7 @@ void WindowsServiceManager::Delete( void )
 
 	if( NULL == schSCManager )
 	{
-		printf( "OpenSCManager failed (%d)\n", GetLastError() );
+		printf( "OpenSCManager failed (%d)", GetLastError() );
 		return;
 	}
 
@@ -99,7 +99,7 @@ void WindowsServiceManager::Delete( void )
 
 	if( schService == NULL )
 	{
-		printf( "OpenService failed (%d)\n", GetLastError() );
+		printf( "OpenService failed (%d)", GetLastError() );
 		CloseServiceHandle( schSCManager );
 		return;
 	}
@@ -108,9 +108,9 @@ void WindowsServiceManager::Delete( void )
 
 	if( !DeleteService( schService ) )
 	{
-		printf( "DeleteService failed (%d)\n", GetLastError() );
+		printf( "DeleteService failed (%d)", GetLastError() );
 	}
-	else printf( "Service deleted successfully\n" );
+	else printf( "Service deleted successfully" );
 
 	CloseServiceHandle( schService );
 	CloseServiceHandle( schSCManager );
@@ -132,7 +132,7 @@ void WindowsServiceManager::UpdateDesc( void )
 
 	if( NULL == schSCManager )
 	{
-		printf( "OpenSCManager failed (%d)\n", GetLastError() );
+		printf( "OpenSCManager failed (%d)", GetLastError() );
 		return;
 	}
 
@@ -145,7 +145,7 @@ void WindowsServiceManager::UpdateDesc( void )
 
 	if( schService == NULL )
 	{
-		printf( "OpenService failed (%d)\n", GetLastError() );
+		printf( "OpenService failed (%d)", GetLastError() );
 		CloseServiceHandle( schSCManager );
 		return;
 	}
@@ -159,9 +159,9 @@ void WindowsServiceManager::UpdateDesc( void )
 		SERVICE_CONFIG_DESCRIPTION, // change: description
 		&sd ) )                      // new description
 	{
-		printf( "ChangeServiceConfig2 failed\n" );
+		printf( "ChangeServiceConfig2 failed" );
 	}
-	else printf( "Service description updated successfully.\n" );
+	else printf( "Service description updated successfully." );
 
 	CloseServiceHandle( schService );
 	CloseServiceHandle( schSCManager );

@@ -10,41 +10,32 @@ namespace Aurora
 	{
 		friend class Singleton<MiscManager>;
 	private:
-		MiscManager( void );
-
-		NON_COPYABLE( MiscManager );
+		MiscManager();
 	public:
-		virtual ~MiscManager( void );
+		virtual ~MiscManager();
 
-		void SetLogFile( WCHAR* pLogFileName );
+		int ConsoleTest();
 
-		DWORD GetProcessorCount( void ) const;
-		UInt16 GetProcessorCountUInt16( void ) const;
-
-		void PrintDebugTextToOutputWindow( ELogPrintType type, WCHAR* szFormat, ... );
+		DWORD GetProcessorCount() const;
+		UInt16 GetProcessorCountU16() const;
 
 		const bool SupportQPF( Int64 &QPFTick );
 		
-		Int64 GetQPCTick( void ) const;
+		Int64 GetQPCTick() const;
 		Int64 GetQPCElapsedMicroSecond( const Int64 &qptTick, const Int64 &startTick, const Int64 &endTick );
 		Int64 GetQPCElapsedSecond( const Int64 &qptTick, const Int64 &startTick, const Int64 &endTick ) const;
 
 		bool ExecuteProcess( const WCHAR* pProcessName, const WCHAR* pParameters, 
-							 const bool minimized = true, const UInt32 executeCount = 1, 
+							 const bool minimized = true, const Int32 executeCount = 1, 
 							 DWORD sleepTime = 0 ) const;
 
-		inline const bool SupportQFC( void ) const
+		inline const bool SupportQFC() const
 		{
 			return supportQFC;
 		}
 
 		bool supportQFC;
-		WCHAR logFileName[MAX_NORMAL_STRING_LEN];
-		CRITICAL_SECTION _monitorObject;
 	};
-
-	#define AuroraMiscManager MiscManager::Instance()
-
-	#define PRINT_NORMAL_LOG( str, ... ) AuroraMiscManager->PrintDebugTextToOutputWindow( ELogPrintType::Normal, str, __VA_ARGS__ )
-	#define PRINT_FILE_LOG( str, ... ) AuroraMiscManager->PrintDebugTextToOutputWindow( ELogPrintType::WriteLog, str, __VA_ARGS__ )
 }
+
+#define AuroraMiscManager Aurora::MiscManager::Instance()

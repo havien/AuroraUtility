@@ -1,7 +1,7 @@
 #pragma once
 #include "AuroraSingleton.h"
 
-namespace AuroraUtility
+namespace Aurora
 {
 	enum class EOperatingSystem
 	{ 
@@ -12,7 +12,7 @@ namespace AuroraUtility
 	{
 		friend class Singleton<CGlobalCommonManager>;
 	private:
-		CGlobalCommonManager( void ) :
+		CGlobalCommonManager():
 		m_OperatingSystem( GetOperatingSystem() )
 		{
 
@@ -20,7 +20,7 @@ namespace AuroraUtility
 		CGlobalCommonManager( const CGlobalCommonManager& CopyArg );
 		const EOperatingSystem m_OperatingSystem;
 	public:
-		virtual ~CGlobalCommonManager( void ) {}
+		virtual ~CGlobalCommonManager(){}
 
 		inline const EOperatingSystem GetOperatingSystem( void )
 		{

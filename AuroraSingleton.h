@@ -3,25 +3,28 @@
 
 namespace Aurora
 {
-	// non thread-safe.
+	// Mayer's Singleton
+	// thread-safe in version C++11 and above.
 	template <typename T>
 	class Singleton
 	{		
 	protected:
-		Singleton( void ) { }
-	public:
+		Singleton(){ }
 		virtual ~Singleton( void )
 		{
-		}
 
+		}
+	public:
 		static T* Instance( void )
 		{
 			static T instance;
 			return &instance;
 		};
-	private:
-		NON_COPYABLE( Singleton );
-		/*Singleton( const Singleton& CopyArg );
-		const Singleton& operator=( const Singleton& );*/
+	
+		Singleton( const Singleton& ) = delete;				// copy construct
+		Singleton( Singleton&& ) = delete;					// assign construct
+
+		Singleton& operator=( const Singleton& ) = delete;	// copy assign
+		Singleton& operator=( Singleton && ) = delete;		// move assign
 	};
 }

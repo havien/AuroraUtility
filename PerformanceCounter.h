@@ -10,6 +10,6 @@ namespace Aurora
 		PerformanceCounter( /*__out Int64 &QPFTicks*/ );
 		~PerformanceCounter();
 	private:
-		bool SupportQPC( void );
+		bool SupportQPC();
 	};
 }

@@ -12,8 +12,8 @@ namespace Aurora
 		template <typename T>
 		class Vector : public std::vector<T>
 		{
-			Vector( void ) { }
-			virtual ~Vector( void ) { }
+			Vector(){ }
+			virtual ~Vector(){ }
 		};
 	}
 }

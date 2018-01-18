@@ -1,83 +1,96 @@
-#pragma once
+﻿#pragma once
+#include <Windows.h>
+#include "MiscManager.h"
 
-#include "Includes.h"
-#include "AuroraDefine.h"
-#include "AuroraSingleton.h"
 #include "TimeManager.h"
 #include "FileManager.h"
 
-#include "Lock.h"
-#include "MiscManager.h"
+
 #include "StringManager.h"
 
 using namespace Aurora;
 	
-MiscManager::MiscManager( void ) : 
+MiscManager::MiscManager(): 
 supportQFC( false )
 {
-	InitializeCriticalSection(&_monitorObject);
+	
 }
 
 MiscManager::~MiscManager( void )
 {
-	DeleteCriticalSection( &_monitorObject );
+
 }
 
-void MiscManager::SetLogFile( WCHAR* pLogFileName )
+int MiscManager::ConsoleTest()
 {
-	if( pLogFileName )
+	HANDLE                     hStdOutput, hStdInput;
+	DWORD                      dwWriteByte, dwReadByte;
+	TCHAR                      szBuf[256];
+	CONSOLE_SCREEN_BUFFER_INFO screenBuffer;
+
+	//system( "mode CON: COLS=80" );
+	
+	SetConsoleTitle( L"MY SERVER" );
+
+	hStdOutput = GetStdHandle( STD_OUTPUT_HANDLE );
+	hStdInput = GetStdHandle( STD_INPUT_HANDLE );
+	GetConsoleScreenBufferInfo( hStdOutput, &screenBuffer );
+
+	SMALL_RECT rect;
+	rect.Top = 1500;
+	rect.Bottom = 3000;
+
+	rect.Left = 2000;
+	rect.Right = 4000;
+	SetConsoleWindowInfo( hStdOutput, TRUE, &rect );
+
+	DWORD prev_mode;
+	GetConsoleMode( hStdInput, &prev_mode );
+	SetConsoleMode( hStdInput, prev_mode & ~ENABLE_QUICK_EDIT_MODE );
+
+	lstrcpy( szBuf, TEXT( "Hello World" ) );
+	WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+
+	SetConsoleTextAttribute( hStdOutput, FOREGROUND_RED );
+	WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+
+	SetConsoleTextAttribute( hStdOutput, FOREGROUND_RED | FOREGROUND_INTENSITY );
+	WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+
+	SetConsoleTextAttribute( hStdOutput, BACKGROUND_BLUE );
+	WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+
+	SetConsoleTextAttribute( hStdOutput, BACKGROUND_BLUE | BACKGROUND_INTENSITY );
+	WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+
+	SetConsoleTextAttribute( hStdOutput, screenBuffer.wAttributes );
+	lstrcpy( szBuf, TEXT( "Enterキーを押すと終了します" ) );
+	WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+
+	ReadConsole( hStdInput, szBuf, sizeof( szBuf ) / sizeof( TCHAR ), &dwReadByte, NULL );
+	szBuf;
+
+	while( true )
 	{
-		bool openResult = AuroraFileManager->Open( pLogFileName );
-		if( true == openResult )
-		{
-			AuroraStringManager->ClearAndCopy( pLogFileName, logFileName, MAX_NORMAL_STRING_LEN );
-		}
+		WriteConsole( hStdOutput, szBuf, lstrlen( szBuf ), &dwWriteByte, NULL );
+		Sleep( 1000 );
 	}
+
+	FreeConsole();
+
+	return 0;
 }
 
-DWORD MiscManager::GetProcessorCount( void ) const
+DWORD MiscManager::GetProcessorCount() const
 {
 	SYSTEM_INFO SysInfo;
 	GetSystemInfo( &SysInfo );
 	return SysInfo.dwNumberOfProcessors;
 }
 
-UInt16 MiscManager::GetProcessorCountUInt16( void ) const
+UInt16 MiscManager::GetProcessorCountU16() const
 {
 	return static_cast<UInt16>(GetProcessorCount());
-}
-
-void MiscManager::PrintDebugTextToOutputWindow( ELogPrintType LogPrintType, WCHAR* szFormat, ... )
-{
-	if( szFormat )
-	{
-		static WCHAR currentTime[MAX_DATETIME_STRING_LEN] = { 0 };
-		static WCHAR szBuff[MAX_SUPER_STRING_LEN] = { 0 };
-		static va_list args;
-
-		static const size_t tempWCHARLen = (MAX_SUPER_STRING_LEN + MAX_DATETIME_STRING_LEN) + 1;
-		static WCHAR tempWCHAR[tempWCHARLen] = { 0 };
-
-		CAutoLockWindows AutoLocker( &_monitorObject );
-		{
-			AuroraTimeManager->GetCurrentTimeString( currentTime );
-			
-			memset( tempWCHAR, 0, tempWCHARLen );
-			wsprintf( tempWCHAR, L"[%s] %s", currentTime, szFormat );
-
-			va_start( args, szFormat );
-			_vsnwprintf_s( reinterpret_cast<WCHAR*>(szBuff), MAX_SUPER_STRING_LEN, MAX_SUPER_STRING_LEN, tempWCHAR, args );
-			va_end( args );
-
-			wprintf_s( reinterpret_cast<WCHAR*>(&szBuff), MAX_SUPER_STRING_LEN );
-			OutputDebugString( reinterpret_cast<WCHAR*>(szBuff) );
-
-			if( LogPrintType == ELogPrintType::WriteLog )
-			{
-				AuroraFileManager->Write( reinterpret_cast<WCHAR*>(szBuff) );
-			}
-		}
-	}
 }
 
 const bool MiscManager::SupportQPF( Int64 &QPFTick )
@@ -96,7 +109,7 @@ const bool MiscManager::SupportQPF( Int64 &QPFTick )
 	return supportQFC;
 }
 
-Int64 MiscManager::GetQPCTick( void ) const
+Int64 MiscManager::GetQPCTick() const
 {
 	if( true == supportQFC )
 	{
@@ -120,8 +133,8 @@ Int64 MiscManager::GetQPCElapsedSecond( const Int64 &QPFTick, const Int64 &Start
 }
 
 bool MiscManager::ExecuteProcess( const WCHAR* pProcessName, const WCHAR* pParameters,
-									const bool minimized, const UInt32 ExecuteCount,
-									DWORD SleepTime ) const
+								  const bool minimized, const Int32 exeCount,
+								  DWORD time ) const
 {
 	if( pProcessName )
 	{
@@ -136,10 +149,10 @@ bool MiscManager::ExecuteProcess( const WCHAR* pProcessName, const WCHAR* pParam
 		minimized ? execinfo.nShow = SW_SHOWMINIMIZED : execinfo.nShow = SW_SHOWNORMAL;
 
 		BOOL Excuted = FALSE;
-		for( UInt32 counter = 0; counter < ExecuteCount; ++counter )
+		for( auto counter = 0; counter < exeCount; ++counter )
 		{
 			Excuted = ShellExecuteEx( &execinfo );
-			Sleep( SleepTime );
+			Sleep( time );
 		}
 
 		return Excuted ? true : false;

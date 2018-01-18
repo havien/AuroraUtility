@@ -10,19 +10,16 @@ namespace Aurora
 {
 	class FileManager : public Singleton<FileManager>
 	{
-		friend class Singleton<FileManager>;
-
-		FileManager( void );
-		NON_COPYABLE( FileManager );
 	public:
-		virtual ~FileManager( void );
+		explicit FileManager();
+		virtual ~FileManager();
 
 		bool IsOpen( const WCHAR* pFileName, const EFileOpenMode mode = EFileOpenMode::Read );
 		bool Open( const WCHAR* pFileName, const EFileOpenMode mode = EFileOpenMode::ReadWrite );
 		bool Write( const WCHAR* pWrite );
-		void Close( void );
+		void Close();
 
-		void Rename( const char* pPath, const char* pOld, const char* pNew ) const;
+		int Rename( const char* pPath, const char* pOld, const char* pNew ) const;
 		void Rename( const WCHAR* pPath, const WCHAR* pOld, const WCHAR* pNew );
 
 		void DetermineExtension( const char* pFileName, OUT char* pExtension ) const;

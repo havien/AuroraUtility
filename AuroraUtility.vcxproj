@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
       <Configuration>Debug</Configuration>
@@ -14,7 +14,7 @@
     <ProjectGuid>{12F3FCD4-138A-412C-87A4-E2559ECA381E}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>AuroraUtility</RootNamespace>
-    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
     <ProjectName>AuroraUtility</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -22,14 +22,14 @@
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -42,16 +42,16 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)..\AuroraLibs\</OutDir>
+    <OutDir>$(SolutionDir)..\Bin\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IntDir>..\Intermediate\Utility\</IntDir>
+    <IntDir>$(ProjectDir)..\Intermediate\Utility\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IntDir>..\Intermediate\Utility\</IntDir>
+    <IntDir>$(ProjectDir)..\Intermediate\Utility\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)</TargetName>
-    <OutDir>$(SolutionDir)..\AuroraLibs\</OutDir>
+    <OutDir>$(SolutionDir)..\Bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -63,6 +63,8 @@
       <TreatWarningAsError>true</TreatWarningAsError>
       <MinimalRebuild>false</MinimalRebuild>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -79,6 +81,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -89,14 +93,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AuroraSingleton.h" />
+    <ClInclude Include="BaseObject.h" />
+    <ClInclude Include="ElapsedTimeCalculator.h" />
     <ClInclude Include="File.h" />
+    <ClInclude Include="Flag.h" />
+    <ClInclude Include="Log.h" />
+    <ClInclude Include="LogManager.h" />
     <ClInclude Include="StringManager.h" />
     <ClInclude Include="FileManager.h" />
     <ClInclude Include="Includes.h" />
     <ClInclude Include="Lock.h" />
     <ClInclude Include="MemoryManager.h" />
     <ClInclude Include="MiscManager.h" />
-    <ClInclude Include="NotUseCurrent.h" />
     <ClInclude Include="PerformanceCounter.h" />
     <ClInclude Include="PlatformManager.h" />
     <ClInclude Include="Queue.h" />
@@ -106,10 +114,16 @@
     <ClInclude Include="ThreadManager.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="Vector.h" />
+    <ClInclude Include="WindowsConsoleManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BaseObject.cpp" />
+    <ClCompile Include="ElapsedTimeCalculator.cpp" />
     <ClCompile Include="File.cpp" />
     <ClCompile Include="FileManager.cpp" />
+    <ClCompile Include="Flag.cpp" />
+    <ClCompile Include="Log.cpp" />
+    <ClCompile Include="LogManager.cpp" />
     <ClCompile Include="MiscManager.cpp" />
     <ClCompile Include="PerformanceCounter.cpp" />
     <ClCompile Include="ServiceModeManager.cpp" />
@@ -117,6 +131,7 @@
     <ClCompile Include="ThreadManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="Vector.cpp" />
+    <ClCompile Include="WindowsConsoleManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
